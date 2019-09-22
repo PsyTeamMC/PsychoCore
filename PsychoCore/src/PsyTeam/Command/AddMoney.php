@@ -37,12 +37,19 @@ class AddMoney extends PluginCommand{
 
             $player = $this->getPlugin()->getServer()->getPlayer($args[0]);
 
-            try{
-                $player->addMoney((int) $args[1]);
-                $sender->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::GREEN . "Added money successfully.");
-                $player->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::LIGHT_PURPLE . "Your money is now " . TextFormat::AQUA . $args[1]);
-                return true;
-            }catch(\Exception $e){
+            if($player instanceof Player){
+                try{
+                    $player->addMoney((int) $args[1]);
+                    $sender->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::GREEN . "Added money successfully.");
+                    $player->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::LIGHT_PURPLE . "Your money is now " . TextFormat::AQUA . $args[1]);
+                    return true;
+                }catch(\Exception $e){
+                    $money = new Config($this->getPlugin()->getDataFolder() . "Money.yml", Config::YAML);
+                    $money->set(strtolower($args[0]), $args[1]);
+                    $sender->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::GREEN . "Player had no data set up, added money successfully via Money file.");
+                    return true;
+                }
+            }else{
                 $money = new Config($this->getPlugin()->getDataFolder() . "Money.yml", Config::YAML);
                 $money->set(strtolower($args[0]), $args[1]);
                 $sender->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::GREEN . "Player was not online, added money successfully via Money file.");
