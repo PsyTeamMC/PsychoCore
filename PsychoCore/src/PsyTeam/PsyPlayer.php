@@ -11,7 +11,7 @@ class PsyPlayer extends Player{
     public function getRank(){
         $file = new Config("plugin_data/PsyCore/Ranks.yml", Config::YAML);
         if($file->exists(strtolower($this->getName()))){
-            return $file->get($this->getName());
+            return $file->get(strtolower($this->getName()));
         }else{
             return null;
         }
@@ -20,7 +20,7 @@ class PsyPlayer extends Player{
     public function getMoney(){
         $file = new Config("plugin_data/PsyCore/Money.yml", Config::YAML);
         if($file->exists(strtolower($this->getName()))){
-            return $file->get($this->getName());
+            return $file->get(strtolower($this->getName()));
         }else{
             return null;
         }
