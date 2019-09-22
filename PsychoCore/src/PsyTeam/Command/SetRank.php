@@ -20,7 +20,7 @@ class SetRank extends PluginCommand{
     public function execute(CommandSender $sender, string $commandLabel, array $args){
 
         if($sender instanceof Player){
-            if($sender->getRank() != "owner" || $sender->getRank() != "admin"){
+            if($sender->getRank() != "owner" && $sender->getRank() != "admin"){
                 $sender->sendMessage(TextFormat::RED . "For server owners only.");
                 return true;
             }
@@ -32,10 +32,11 @@ class SetRank extends PluginCommand{
 
             $ranks = new Config($this->getPlugin()->getDataFolder() . "Ranks.yml", Config::YAML);
             $ranks->set(strtolower($args[0]), strtolower($args[1]));
-            $sender->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::GREEN . "Added rank successfully.");
+            $ranks->save();
+            $sender->sendMessage(TextFormat::YELLOW . "[!] " . TextFormat::GREEN . "Added rank successfully.");
 
             if($p = $this->getPlugin()->getServer()->getPlayer($args[0])){
-                $p->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::LIGHT_PURPLE . "Your rank is now " . TextFormat::AQUA . strtolower($args[1]));
+                $p->sendMessage(TextFormat::YELLOW . "[!] " . TextFormat::LIGHT_PURPLE . "Your rank is now " . TextFormat::AQUA . strtolower($args[1]));
             }
             return true;
         }else{
@@ -46,7 +47,8 @@ class SetRank extends PluginCommand{
 
             $ranks = new Config($this->getPlugin()->getDataFolder() . "Ranks.yml", Config::YAML);
             $ranks->set(strtolower($args[0]), strtolower($args[1]));
-            $sender->sendMessage(TextFormat::YELLOW . "[!]" . TextFormat::GREEN . "Added rank successfully.");
+            $ranks->save();
+            $sender->sendMessage(TextFormat::YELLOW . "[!] " . TextFormat::GREEN . "Added rank successfully.");
             return true;
         }
     }
