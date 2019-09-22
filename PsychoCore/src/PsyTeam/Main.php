@@ -57,10 +57,11 @@ class Main extends PluginBase implements Listener {
     }
 
     public function onJoin(PlayerJoinEvent $event) {
+        if($event->getPlayer() instanceof PsyPlayer){
         $event->getPlayer()->sendForm(new JoinForm());
         $event->getPlayer()->addTitle(TextFormat::YELLOW . "Welcome to PF!" , TextFormat::GREEN . "This is Beta!");
 
-        if(!$event->getPlayer()->hasPlayedBefore()){
+        if(!$event->getPlayer()->hasPlayedBefore()) {
 
             $ranks = new Config($this->getPlugin()->getDataFolder() . "Ranks.yml", Config::YAML);
             $ranks->set(strtolower($event->getPlayer()->getName()), "default");
@@ -68,7 +69,8 @@ class Main extends PluginBase implements Listener {
             $money = new Config($this->getPlugin()->getDataFolder() . "Money.yml", Config::YAML);
             $money->set(strtolower($event->getPlayer()->getName()), 0);
 
-            $this->getServer()->broadcastMessage(TextFormat::YELLOW . "[!]" . TextFormat::AQUA . "Please welcome " . $event->getPlayer()->getName() . "to the server!");
+            $this->getServer()->broadcastMessage(TextFormat::YELLOW . "[!] " . TextFormat::AQUA . "Please welcome " . $event->getPlayer()->getName() . "to the server!");
+        }
         }
     }
 
@@ -76,12 +78,15 @@ class Main extends PluginBase implements Listener {
         $msg = $event->getMessage();
         $p = $event->getPlayer();
 
-        if($p->getRank() == "owner"){
-            $event->setFormat(TextFormat::BLUE . TextFormat::BOLD . "OWNER" . TextFormat::RESET . TextFormat::YELLOW . $p->getName() . TextFormat::GRAY . $msg);
-        }elseif($p->getRank() == "admin"){
-            $event->setFormat(TextFormat::GREEN . TextFormat::BOLD . "ADMIN" . TextFormat::RESET . TextFormat::YELLOW . $p->getName() . TextFormat::GRAY . $msg);
-        }else{
-            $event->setFormat(TextFormat::YELLOW . $p->getName() . TextFormat::GRAY . $msg);
+        if($p instanceof PsyPlayer) {
+
+            if ($p->getRank() == "owner") {
+                $event->setFormat(TextFormat::BLUE . TextFormat::BOLD . "OWNER " . TextFormat::RESET . TextFormat::YELLOW . $p->getName() . " " . TextFormat::GRAY . $msg);
+            } elseif ($p->getRank() == "admin") {
+                $event->setFormat(TextFormat::GREEN . TextFormat::BOLD . "ADMIN " . TextFormat::RESET . TextFormat::YELLOW . $p->getName() . " " . TextFormat::GRAY . $msg);
+            } else {
+                $event->setFormat(TextFormat::YELLOW . $p->getName() . TextFormat::GRAY . " " . $msg);
+            }
         }
     }
 
@@ -129,3 +134,4 @@ class Main extends PluginBase implements Listener {
 
 
 }
+
